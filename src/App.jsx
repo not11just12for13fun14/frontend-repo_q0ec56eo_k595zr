@@ -12,7 +12,11 @@ function App() {
   const [result, setResult] = useState(null)
   const [view, setView] = useState('study') // 'study' | 'outline'
 
-  const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+  // Backend URL strategy:
+  // 1) Use VITE_BACKEND_URL if provided (best for separate domains)
+  // 2) Fallback to same-host port 8000 so it works across any domain/host
+  const derivedBase = `${window.location.protocol}//${window.location.hostname}:8000`
+  const baseUrl = (import.meta.env.VITE_BACKEND_URL || derivedBase).replace(/\/$/, '')
 
   const askAssistant = async () => {
     setLoading(true)
